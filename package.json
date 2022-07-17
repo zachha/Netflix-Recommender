@@ -1,0 +1,24 @@
+{
+  "name": "show-recommender",
+  "version": "1.0.0",
+  "description": "small webapp that accesses a postgresql database containing netflix movie/tv show information. tensorflow.js is used to build a machine learning recommender system that takes 3 movie/show inputs from the user and recommends a show or movie based on those inputs.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachha/Show-Recommender.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zachha/Show-Recommender/issues"
+  },
+  "homepage": "https://github.com/zachha/Show-Recommender#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
