@@ -1,6 +1,7 @@
 const fs = require("fs");
 const express = require("express");
 const path = require("path");
+const bodyParser = require("body-parser");
 const pgtools = require("pgtools");
 const Pool = require('pg').Pool;
 require('dotenv').config();
@@ -11,6 +12,9 @@ const port = process.env.PORT || 8000;
 
 //express initialized
 const app = express();
+app.use(express.static('public'));
+// used to handle form submissions
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // connects to our recommenderDB database instance
@@ -27,9 +31,15 @@ pool.query('SELECT NOW()', (err, res) => {
     pool.end();
 });
 
+/*
 app.get("/", (req, res) => {
-    res.status(200).send("Netflix Show Recommender");
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
+*/
+
+const router = require("./controllers/routes/htmlRoutes.js");
+app.use(router);
+
 
 // listening for server
 app.listen(port, () => {

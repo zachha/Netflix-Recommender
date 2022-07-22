@@ -1,0 +1,65 @@
+
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #141414;
+    /* background-color: rgb(229, 9, 20); */
+}
+
+.mid {
+    width: 100%;
+    height: 50%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* color: white; */
+    color: rgb(229, 9, 20);
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    text-align: center;
+}
+
+.holderDiv {
+    width: 100%;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.cardDiv {
+    width: 51%;
+    text-align: center;
+    background-color: rgb(229, 9, 20);
+    color: white;
+    margin: 20px;
+}
+
+.addBtn {
+    background-color: white;
+    color: rgb(229, 9, 20);
+    border-color: white;
+}
+.addBtn:hover {
+    background-color: #141414;
+    color: white;
+    border-color: #141414;
+}
+
+h1 {
+    font-size: 130px;
+    margin: 20px;
+}
+
+h2 {
+    font-size: 60px;
+    margin: 20px;
+}

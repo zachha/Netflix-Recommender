@@ -1,11 +1,11 @@
-// Initial database creation and configuration
-
 const fs = require("fs");
 const fastcsv = require("fast-csv");
 const pgtools = require("pgtools");
 const Pool = require('pg').Pool;
 require('dotenv').config();
 
+/*
+// Initial database creation and configuration
 const config = {
     user: process.env.PG_USER,
     host: process.env.PG_HOST,
@@ -20,6 +20,8 @@ pgtools.createdb(config, process.env.PG_DATABASE, function(err, res) {
     }
     console.log(res);
 });
+*/
+
 
 const pool = new Pool({
     user: process.env.PG_USER,
