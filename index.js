@@ -1,6 +1,9 @@
+const fs = require("fs");
 const express = require("express");
 const path = require("path");
 const pgtools = require("pgtools");
+const Pool = require('pg').Pool;
+require('dotenv').config();
 
 
 //set PORT
@@ -9,19 +12,19 @@ const port = process.env.PORT || 8000;
 //express initialized
 const app = express();
 
-const config = {
+
+// connects to our recommenderDB database instance
+const pool = new Pool({
     user: process.env.PG_USER,
     host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
     password: process.env.PG_PASSWORD,
     port: process.env.PG_PORT
-};
+});
 
-pgtools.createdb(config, "RecommenderDB", function(err, res) {
-    if (err) {
-        console.error(err);
-        process.exit(-1);
-    }
-    console.log(res);
+pool.query('SELECT NOW()', (err, res) => {
+    console.log(err, res);
+    pool.end();
 });
 
 app.get("/", (req, res) => {
