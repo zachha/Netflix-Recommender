@@ -10,11 +10,11 @@
     <body>
         <div class="mid">
             <h1>Netflix Recommender</h1>
-            <h2>Search for some titles similar to what you'd like to watch!</h2>
-            <form>
-                <input type="text" id="titleSearch" name="titleSearch"
+            <h2 id="subheader">Search for titles similar to what you'd like to watch!</h2>
+            <form id="searchForm">
+                <input id="searchBox" type="text" id="titleSearch" name="titleSearch"
                 placeholder="show or movie title">
-                <input type="submit" value="Search!">
+                <input type="submit" value="Search!" class="searchBtn">
             </form>
             <div class="row holderDiv">
                 <div class="card text-center mx-auto cardDiv">
@@ -24,7 +24,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary addBtn">Add Show</a>
+                        <a href="#" class="algoBtn btn btn-primary addBtn">Add Show</a>
                     </div>
                     <div class="card-footer text-muted">
                         2 days ago
@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary addBtn">Add Show</a>
+                        <a href="#" class="algoBtn btn btn-primary addBtn">Add Show</a>
                     </div>
                     <div class="card-footer text-muted">
                         2 days ago
@@ -50,7 +50,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary addBtn">Add Show</a>
+                        <a href="#" class="algoBtn btn btn-primary addBtn">Add Show</a>
                     </div>
                     <div class="card-footer text-muted">
                         2 days ago
@@ -63,7 +63,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary addBtn">Add Show</a>
+                        <a href="#" class="algoBtn btn btn-primary addBtn">Add Show</a>
                     </div>
                     <div class="card-footer text-muted">
                         2 days ago
@@ -76,7 +76,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary addBtn">Add Show</a>
+                        <a href="#" class="algoBtn btn btn-primary addBtn">Add Show</a>
                     </div>
                     <div class="card-footer text-muted">
                         2 days ago
@@ -89,7 +89,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary addBtn">Add Show</a>
+                        <a href="#" class="algoBtn btn btn-primary addBtn">Add Show</a>
                     </div>
                     <div class="card-footer text-muted">
                         2 days ago
@@ -97,6 +97,7 @@
                 </div>
             </div>
         </div>
-        <script src="public/app.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="app.js"></script>
     </body>
 </html>
