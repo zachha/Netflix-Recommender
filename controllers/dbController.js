@@ -1,4 +1,5 @@
 const Title = require('../models/Title.js');
+const Accuracy = require('../models/Accuracy.js');
 
 module.exports = {
 
@@ -17,10 +18,11 @@ module.exports = {
                 /*
                 {
                     $match: {
-                        "genres": reccedTitle.genres
+                        genres: { $regex: )
                     }
                 },
                 */
+                
                 {
                     $project: {
                         id: 1,
@@ -36,22 +38,21 @@ module.exports = {
                         distance: {
                             $sqrt: {
                                 $add: [
-                                    { $pow: [ { $subtract: [Number(reccedTitle.imdb_votes), Number("$imdb_votes") ] }, 2 ] },
-                                    { $pow: [ { $subtract: [Number(reccedTitle.imdb_score), Number("$imdb_score") ] }, 2 ] }
+                                    { $pow: [ { $subtract: [Number(reccedTitle[0].imdb_score), "$imdb_score" ] }, 2 ] },
+                                    { $pow: [ { $subtract: [Number(reccedTitle[0].imdb_votes), "$imdb_votes" ] }, 2 ] }
                                 ]
                             }
                         }
                     }
                 },
                 {
-                    $match: { distance: {$ne: NaN }}
-                },
-                {
                     $sort: { distance: 1}
                 },
+                
                 {
-                    $limit: 5
+                    $limit: 10
                 }
+                
             ]).then(recommendedShows => {
                 console.log(recommendedShows);
                 res.send(recommendedShows);
@@ -80,5 +81,10 @@ module.exports = {
         }).catch(err => {
             return res.send(err);
         })
+    },
+
+    addAccuracy: (accuracy, res) => {
+        //Accuracy.
+        return;
     }
 }

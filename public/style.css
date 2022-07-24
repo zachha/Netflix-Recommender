@@ -54,6 +54,18 @@ body {
     border-color: #141414;
 }
 
+.reccDiv {
+    background-color: rgb(229, 9, 20);
+    color: white;
+}
+
+.accBtn {
+    width: 20%;
+}
+.carousel {
+    height: 20%;
+    width: 50%;
+}
 h1 {
     font-size: 130px;
     margin: 20px;
