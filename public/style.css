@@ -38,19 +38,19 @@ body {
 .cardDiv {
     width: 51%;
     text-align: center;
-    background-color: rgb(229, 9, 20);
-    color: white;
+    background-color: white;
+    color: rgb(229, 9, 20);
     margin: 20px;
 }
 
 .addBtn {
-    background-color: white;
-    color: rgb(229, 9, 20);
-    border-color: white;
-}
-.addBtn:hover {
     background-color: #141414;
     color: white;
+    border-color: #141414;
+}
+.addBtn:hover {
+    background-color: rgb(229, 9, 20);
+    color: #141414;
     border-color: #141414;
 }
 
