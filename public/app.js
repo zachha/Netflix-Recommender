@@ -24,23 +24,29 @@ function addNewCard(titleData) {
     `
 }
 // dynamically adds "true" accuracy button
-function addAccBtnTrue() {
+function addAccBtns() {
     return `
-                <button type="button" class="btn btn-primary btn-lg accBtn" data-bool="True">Yes</button>
-    `
-}
-// dynamically adds "false" accuracy button
-function addAccBtnFalse() {
-    return `
-                <button type="button" class="btn btn-primary btn-lg accBtn" data-bool="False">No</button>
+            <div id="accBtnDiv">
+            <h2 id="accuracyHeader">Were these Recommendations interesting?</h2>
+                <button type="button" class="btn btn-primary btn-lg accBtn" data-bool="true">Yes</button>
+                <button type="button" class="btn btn-primary btn-lg accBtn" data-bool="false">No</button>
+            </div>
     `
 }
 
+function addThankMsg() {
+    return `
+            <h2 id="accuracyHeader">Your Feedback has been Recorded!</h2>
+    `
+}
+
+// dynamically adds data visualization images
 function addDataImages() {
     return `
-            <img src="/images/movie_and_show_barchart.jpg" class="d-block w-50" alt="...">
-            <img src="/images/movie_ratings_piechart.jpg" class="d-block w-50" alt="...">
-            <img src="/images/show_seasons_barchart.jpg" class="d-block w-50" alt="...">
+            
+            <img src="/images/movie_and_show_barchart.jpg" class="d-block w-50 dataVis" alt="...">
+            <img src="/images/movie_ratings_piechart.jpg" class="d-block w-50 dataVis" alt="...">
+            <img src="/images/show_seasons_barchart.jpg" class="d-block w-50 dataVis" alt="...">
     `
 }
 
@@ -55,7 +61,7 @@ function addRecommendedCard(titleData) {
                         <h5 class="card-title recommended-title">${titleData.title}</h5>
                         <p class="card-text recommended-text">${titleData.description}</p>
                     </div>
-                    <div class="card-footer text-muted recommended-genres">
+                    <div class="card-footer recommended-genres">
                         ${titleData.genres}
                     </div>
                 </div>
@@ -63,12 +69,19 @@ function addRecommendedCard(titleData) {
 }
 // adds event listeners to dynamic accuracy buttons
 function dynamicAccuracyButtons() {
-    holderDiv.insertAdjacentHTML('afterbegin', addAccBtnFalse());
-    holderDiv.insertAdjacentHTML('afterbegin', addAccBtnTrue());
+    holderDiv.insertAdjacentHTML('afterbegin', addAccBtns());
     let accBtns = document.getElementsByClassName("accBtn");
     Array.from(accBtns).forEach( btn => {
         btn.addEventListener('click', () => {
-            console.log(btn.dataset.bool);
+            axios.post('/addAccuracy', {
+                accBool: btn.dataset.bool
+            })
+            .then( res => {
+                let holderChildren = holderDiv.children;
+                console.log(holderChildren);
+                holderChildren[0].innerHTML = "";
+                holderDiv.insertAdjacentHTML('afterbegin', addThankMsg());
+            })
         })
     })
 }
@@ -118,10 +131,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let holderDiv = document.getElementById('holderDiv');
     let dataVisBtn = document.getElementById('dataVisBtn');
 
-    dataVisBtn.addEventListener('click', () => {
+    dataVisBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         clearDiv(holderDiv);
         holderDiv.insertAdjacentHTML('beforeend', addDataImages());
-    })
+    });
 
     // Listens for the form button to fire off and then queries the database for the input movie or show
     searchForm.addEventListener('submit', (formData) => {

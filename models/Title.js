@@ -7,11 +7,12 @@ let titleSchema = new Schema({
     type: String,
     description: String,
     runtime: String,
-    genres: String,
+    genre: String,
+    genres: [{ type: String }],
     seasons: String,
-    imdb_score: Number,
-    imdb_votes: Number,
-    tmdb_score: Number
+    imdb_score: String,
+    imdb_votes: String,
+    tmdb_score: String
 });
 
 const Title = mongoose.model("titles", titleSchema);

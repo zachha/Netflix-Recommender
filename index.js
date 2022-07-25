@@ -5,19 +5,16 @@ const path = require("path");
 require('dotenv').config();
 
 // db connections
-main().catch(err => console.log(err));
 async function main() {
     // Database connection string goes here
     await mongoose.connect(process.env.MONGO_URI);
 }
-
+main().catch(err => console.log(err));
 
 //  Connection announced and logged
 mongoose.connection.once('open', function () {
   console.log('MongoDB database connection established successfully')
 })
-
-
 
 //set PORT
 const port = process.env.PORT || 8000;

@@ -10,47 +10,44 @@ module.exports = {
         // First we get the recommended title's object
         Title.find({ title: title})
         .then( searchData => {
-            console.log("SEARCH DATA: " + searchData);
-            let reccedTitle = searchData;
 
+            let reccedTitle = searchData;
             // Performs the Euclidean Similarity algorithm on every title in the dataset
             Title.aggregate([
-                /*
+                // First we match to make sure no titles match the chosen show so it doesn't recommend itself
                 {
                     $match: {
-                        genres: { $regex: )
+                        "title": {$ne: reccedTitle[0].title},
+                        "genres": { $elemMatch: { $in: reccedTitle[0].genres } }
                     }
                 },
-                */
-                
+
                 {
                     $project: {
                         id: 1,
                         title: 1,
                         genres: 1,
                         type: 1,
-                        runtime: 1,
-                        seasons: 1,
                         description: 1,
                         imdb_score: 1,
                         imdb_votes: 1,
-                        tmdb_score: 1,
                         distance: {
                             $sqrt: {
                                 $add: [
-                                    { $pow: [ { $subtract: [Number(reccedTitle[0].imdb_score), "$imdb_score" ] }, 2 ] },
-                                    { $pow: [ { $subtract: [Number(reccedTitle[0].imdb_votes), "$imdb_votes" ] }, 2 ] }
+                                    { $pow: [ { $subtract: [ { $toDouble: reccedTitle[0].imdb_score}, { $toDouble: "$imdb_score" } ] }, 2 ] },
+                                    { $pow: [ { $subtract: [ { $toDouble: reccedTitle[0].imdb_votes}, { $toDouble: "$imdb_votes" } ] }, 2 ] }
                                 ]
                             }
                         }
                     }
                 },
+                // Sorts the list by smallest euclidean distance to largest. The smaller the distance, the greater the similarity of popularity to the chosen title. 
                 {
                     $sort: { distance: 1}
                 },
                 
                 {
-                    $limit: 10
+                    $limit: 5
                 }
                 
             ]).then(recommendedShows => {
@@ -66,6 +63,7 @@ module.exports = {
         
     }, 
 
+    // reads the db and returns titles that contain the string input
     findSearchedTitles: (title, res) => {
         Title.find({
             title: { "$regex": title, "$options": "i"}    
@@ -75,16 +73,21 @@ module.exports = {
             if(searchData.length>0) {
                 console.log(searchData);
                 res.send(searchData);
-            } else {
-                console.log("EMPTY SEARCH")
-            } 
+            };
         }).catch(err => {
             return res.send(err);
-        })
+        });
     },
 
+    // Adds the true or false boolean to the Accuracy table based on user input
     addAccuracy: (accuracy, res) => {
-        //Accuracy.
-        return;
-    }
+        Accuracy.create(
+            { accurate: accuracy }
+        ).then( data => {
+            console.log("Accuracy collection updated");
+            res.send(data);
+        }).catch(err => {
+            return res.send(err);
+        });
+    },
 }

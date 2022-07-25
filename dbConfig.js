@@ -1,42 +1,90 @@
-const fs = require("fs");
 const fastcsv = require("fast-csv");
+const mongodb = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
+const fs = require("fs");
 require('dotenv').config();
+const Title = require('./models/Title.js');
 
+// INSERT DATABASE NAME HERE 
+let dbName = "movies"
+// INSERT DATABASE CONNECTION STRING HERE
+let mongoURI = process.env.MONGO_URI;
 
-const pool = new Pool({
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PG_DATABASE,
-    password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT
-});
-
-// reads cleaned .csv file and fills database with data
-const query = "INSERT INTO titles (title_id, title, type, description, runtime, genres, seasons, imdb_score, imdb_votes, tmdb_score) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)";
-let stream = fs.createReadStream('rawTitles_cleaned.csv');
-let rawData = [];
-let rawStream = fastcsv
-    .parse()
-    .on("data", function(data) {
-        rawData.push(data);
-    })
-    .on("end", function() {
-        rawData.shift();
-        pool.connect((err, client, done) => {
-            if (err) throw err;
-            try {
-                rawData.forEach(row => {
-                    client.query(query, row, (err, res) => {
-                        if (err) {
-                            console.log(err.stack);
-                        } else {
-                            console.log("INSERTED: " + res.rowCount + "ROW:", row);
-                        }
+// Uses the streaming functionality and the fast-csv package to read our cleaned .csv dataset into the mongoDB database
+let stream = fs.createReadStream("rawTitles_cleaned.csv");
+let csvData = [];
+let csvStream = fastcsv.parse()
+                .on("data", function(data) {
+                    csvData.push({
+                        id: data[0],
+                        title: data[1],
+                        type: data[2],
+                        description: data[3],
+                        runtime: data[4],
+                        genre: data[5],
+                        seasons: data[6],
+                        imdb_score: data[7],
+                        imdb_votes: data[8],
+                        tmdb_score: data[9]
+                    });
+                })
+                .on("end", function() {
+                    csvData.shift();
+                    mongodb.connect( mongoURI, { 
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true
+                    }, (err, client) => {
+                        if (err) throw err;
+                        client.db(dbName)
+                        .collection("titles")
+                        .insertMany(csvData, (err, res) => {
+                            if (err) throw err;
+                            console.log(`Inserted: ${res.insertedCount} rows`);
+                            client.close();
+                        });
                     });
                 });
-            } finally {
-                done();
-            }
-        });
+stream.pipe(csvStream);
+
+// async function waits for the csv input stream to occur before updating all the appropriate database fields after
+async function main() {
+    await mongoose.connect(mongoURI).then( () => {
+        updateDataTypes();
     });
-stream.pipe(rawStream);
+};
+
+
+// Updates the genres field by pushing every genre to the mongodb array 
+function updateDataTypes() {
+    Title.find({}).then( async allElements => {
+    Title.syncIndexes();
+    for await (const [i, element] of allElements.entries()) {
+        // Splices the array data that was input by the csv in the wrong format and reformats into an array
+        let reccedGenres = element.genre.split(/\s(?=')/);
+        let parsedGenres = reccedGenres.map( ele => {
+            return ele.replace("'", "").replace("[", "").replace(",", "").replace("]", "").replace("'", "");
+        });
+        let tempArray = parsedGenres;
+
+        Title.updateOne({"title": element.title},
+            { "$push": { "genres": { "$each": tempArray}}}
+        ).then( () => {
+            if (i === allElements.length - 1) {
+                console.log("all element types updated");
+                console.log("Database is fully configured!");
+            } else {
+                console.log("updating array: " + element.id);
+            }
+        }).catch( (err) => {
+            console.log(err);
+        });
+    };
+}).catch(err => {
+    console.log("error with database input: " + err);
+});
+};
+// timeout function starts the updateDataType function after 4s so the database has time to be initialized first
+MyTimeout = setTimeout( () => {
+    main();
+}, 4000);
+
