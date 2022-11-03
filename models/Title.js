@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// MongoDB schema for the Titles collection
 let titleSchema = new Schema({
     id: String,
     title: String,

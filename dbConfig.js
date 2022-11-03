@@ -46,7 +46,7 @@ let csvStream = fastcsv.parse()
                 });
 stream.pipe(csvStream);
 
-// async function waits for the csv input stream to occur before updating all the appropriate database fields after
+// Async function waits for the mongodb connection to occur before attempting to update data types
 async function main() {
     await mongoose.connect(mongoURI).then( () => {
         updateDataTypes();
@@ -83,7 +83,8 @@ function updateDataTypes() {
     console.log("error with database input: " + err);
 });
 };
-// timeout function starts the updateDataType function after 4s so the database has time to be initialized first
+
+// Timeout function starts the updateDataType function after 4s so the database has time to be initialized first
 MyTimeout = setTimeout( () => {
     main();
 }, 4000);

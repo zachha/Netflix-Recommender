@@ -4,34 +4,34 @@ const express = require("express");
 const path = require("path");
 require('dotenv').config();
 
-// db connections
+// Db connections
 async function main() {
-    // Database connection string goes here
+    // DATABASE CONNECTION STRING GOES HERE
     await mongoose.connect(process.env.MONGO_URI);
 }
 main().catch(err => console.log(err));
 
-//  Connection announced and logged
+// Connection announced and logged
 mongoose.connection.once('open', function () {
   console.log('MongoDB database connection established successfully')
 })
 
-//set PORT
+// Set PORT
 const port = process.env.PORT || 8000;
 
-//express initialized
+// Express initialized
 const app = express();
-// pathing directory placed in the public folder with the public facing files
+// Pathing directory placed in the public folder with the public facing files
 app.use(express.static('public'));
-// used to handle form submissions
+// Used to handle form submissions
 app.use(express.json());
 
-// api routing
+// API routing
 const router = require("./controllers/routes/htmlRoutes.js");
 app.use(router);
 
 
-// listening for server
+// Listening for server
 app.listen(port, () => {
   console.log("App listening on PORT " + port);
 });

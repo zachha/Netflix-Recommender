@@ -1,4 +1,4 @@
-// helper function that clears divs of html 
+// Helper function that clears divs of html 
 function clearDiv(div) {
     while(div.firstChild){
         div.removeChild(div.firstChild);
@@ -23,7 +23,7 @@ function addNewCard(titleData) {
                 </div>
     `
 }
-// dynamically adds "true" accuracy button
+// Dynamically adds accuracy buttons
 function addAccBtns() {
     return `
             <div id="accBtnDiv">
@@ -34,13 +34,14 @@ function addAccBtns() {
     `
 }
 
+// Dynamically adds message confirming user accuracy input
 function addThankMsg() {
     return `
             <h2 id="accuracyHeader">Your Feedback has been Recorded!</h2>
     `
 }
 
-// dynamically adds data visualization images
+// Dynamically adds data visualization images
 function addDataImages() {
     return `
             
@@ -50,7 +51,7 @@ function addDataImages() {
     `
 }
 
-// dynamically adds cards for recommended movie list
+// Dynamically adds cards for recommended movie list
 function addRecommendedCard(titleData) {
     return `
                 <div class="card text-center mx-auto cardDiv reccDiv">
@@ -67,7 +68,7 @@ function addRecommendedCard(titleData) {
                 </div>
     `
 }
-// adds event listeners to dynamic accuracy buttons
+// Adds event listeners to dynamic accuracy buttons
 function dynamicAccuracyButtons() {
     holderDiv.insertAdjacentHTML('afterbegin', addAccBtns());
     let accBtns = document.getElementsByClassName("accBtn");
@@ -78,7 +79,6 @@ function dynamicAccuracyButtons() {
             })
             .then( res => {
                 let holderChildren = holderDiv.children;
-                console.log(holderChildren);
                 holderChildren[0].innerHTML = "";
                 holderDiv.insertAdjacentHTML('afterbegin', addThankMsg());
             })
@@ -86,21 +86,19 @@ function dynamicAccuracyButtons() {
     })
 }
 
-// attaches recommender on click event listener to dynamically added buttons
+// Attaches recommender on click event listener to dynamically added buttons
 function dynamicDivButtons() {
     let algoBtns = document.getElementsByClassName("algoBtn");
     Array.from(algoBtns).forEach( btn => {
         btn.addEventListener('click', () => {
             clearDiv(holderDiv);
             let chosenTitle = btn.dataset.title;
-            console.log("THIS: " + chosenTitle);
             axios.post('/getRecommendedTitles', {
                 reccTitle: chosenTitle
             })
-            // gets recommended titles info back and dynamically creates cards and accuracy btns
+            // Gets recommended titles info back and dynamically creates cards and accuracy btns
             .then( res => {
                 subheader.innerHTML = "Here are you recommendations!"
-                console.log(res);
                 let reccData = res.data;
                 if (reccData.length > 0) {
                     reccData.forEach( show => {
@@ -139,7 +137,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Listens for the form button to fire off and then queries the database for the input movie or show
     searchForm.addEventListener('submit', (formData) => {
-        console.log(searchBox.value);
         clearDiv(holderDiv);
         formData.preventDefault();
       
@@ -147,9 +144,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         searchTitle: searchBox.value
        })
        .then( res => {
-            console.log(res.data);
             data = res.data;
-            console.log(res.data);
             if (data.length > 0) {
                 data.forEach( show => {
                     holderDiv.insertAdjacentHTML('beforeend', addNewCard(show));
