@@ -13,15 +13,14 @@ The Netflix Recommender contains two main features:
   - The user can select a specific movie and then get a list of recommended movies based off of their selection
 
 ## Libraries and Technology
-
- • Heroku
- • Node.js
- • NPM
- • Express.js
- • Axios
- • Bootstrap
- • MongoDB
- • Mongoose
+    • Heroku
+    • Node.js
+    • NPM
+    • Express.js
+    • Axios
+    • Bootstrap
+    • MongoDB
+    • Mongoose
 
 ## Upcoming Changes
 
