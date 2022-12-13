@@ -8,7 +8,9 @@ Netflix Recommender is a small full-stack web application that allows a user to 
 
 ### Features
 
-Test test test
+The Netflix Recommender contains two main features:
+  - Allows User to search for a film/television show in the Netflix library
+  - The user can select a specific movie and then get a list of recommended movies based off of their selection
 
 ## Libraries and Technology
 
